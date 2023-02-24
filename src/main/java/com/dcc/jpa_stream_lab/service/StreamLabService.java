@@ -117,7 +117,12 @@ public class StreamLabService {
         // Write a query that retrieves all of the products in the shopping cart of the user who has the email "afton@gmail.com".
         // Return the list
 
-    	return null;
+
+        User user_one = users.findAll().stream().filter(user -> user.getEmail().equals("afton@gmail.com")).findFirst().orElse(null);
+        List <Product> products = user_one.getShoppingcartItems().stream().map(i -> i.getProduct()).toList();
+
+
+    	return products;
     }
 
     public long RProblemSeven()
@@ -125,8 +130,12 @@ public class StreamLabService {
         // Write a query that retrieves all of the products in the shopping cart of the user who has the email "oda@gmail.com" and returns the sum of all of the products prices.
     	// Remember to break the problem down and take it one step at a time!
 
-
-    	return 0;
+        User user_two = users.findAll().stream().filter(user -> user.getEmail().equals("oda@gmail.com")).findFirst().orElse(null);
+        List <Product> prods = user_two.getShoppingcartItems().stream().map(i -> i.getProduct()).toList();
+//        Int sum = 0;
+        List <Integer> prices = prods.stream().map(p -> p.getPrice()).toList();
+        Integer totalPrice = prices.stream().mapToInt(Integer::intValue).sum();
+    	return totalPrice;
 
     }
 
