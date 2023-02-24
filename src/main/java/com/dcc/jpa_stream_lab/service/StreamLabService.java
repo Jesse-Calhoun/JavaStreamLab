@@ -132,7 +132,6 @@ public class StreamLabService {
 
         User user_two = users.findAll().stream().filter(user -> user.getEmail().equals("oda@gmail.com")).findFirst().orElse(null);
         List <Product> prods = user_two.getShoppingcartItems().stream().map(i -> i.getProduct()).toList();
-//        Int sum = 0;
         List <Integer> prices = prods.stream().map(p -> p.getPrice()).toList();
         Integer totalPrice = prices.stream().mapToInt(Integer::intValue).sum();
     	return totalPrice;
@@ -143,8 +142,14 @@ public class StreamLabService {
     {
         // Write a query that retrieves all of the products in the shopping cart of users who have the role of "Employee".
     	// Return the list
+        Role employeeRole = roles.findAll().stream().filter(r -> r.getName().equals("Employee")).findFirst().orElse(null);
+        List<User> employees = users.findAll().stream().filter(u -> u.getRoles().contains(employeeRole)).toList();
+        List <List<ShoppingcartItem>> employeesCarts = employees.stream().map(employee -> employee.getShoppingcartItems()).toList();
+        List <ShoppingcartItem> employees_cart = employeesCarts.stream().flatMap(cart -> cart.stream()).collect(Collectors.toList());
+        List <Product> employees_products = employees_cart.stream().map(item -> item.getProduct()).toList();
+//        List<Object> flat = list.stream().flatMap(List::stream).collect(Collectors.toList());
 
-    	return null;
+        return employees_products;
     }
 
     // <><><><><><><><> CUD (Create, Update, Delete) Actions <><><><><><><><><>
